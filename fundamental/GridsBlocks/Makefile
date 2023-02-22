@@ -1,3 +1,4 @@
+# ?= 当变量为空时赋值
 CUDAFLAGS ?= -g
 
 # Define a variable
