@@ -11,7 +11,8 @@
 ## Programming
 
 ### Software - driver and runtime APIs
-* Runtime API Version Must be >= Driver API Version
+CUDA Driver API: low-level API 太底层使用不方便，随GPU Driver安装。(libcuda.so)    
+Runtime API：High-level API，随CUDA toolkit安装。(libcudart.so, nvcc)
 
 ### Exection model - kernels, threads, and blocks
 * Kernel - top-level device function 

@@ -14,9 +14,9 @@ int main()
   cudaOccupancyMaxPotentialBlockSize(&min_grid_size, &block_size, kernel_1d, 0,
                                      0);
 
-  printf("Block size %d\nMin grid size %d\n", block_size, min_grid_size);
+  printf("Best Block size %d\nMin grid size %d\n", block_size, min_grid_size);
 }
 
 // output:
-// Block size 1024
-// Min grid size 160
+// Best Block size 768
+// Min grid size 164
