@@ -9,8 +9,6 @@
 函数库：cublas, nvblas, cusolver, cufftw, cusparse, nvgraph
 
 ## Programming with CUDA
-<details>
-<summary>---></summary>
 
 ### Software - driver and runtime APIs
 CUDA Driver API: low-level API，installed via GPU Driver。(libcuda.so)    
@@ -37,11 +35,7 @@ Runtime API：High-level API，installed CUDA via toolkit。(libcudart.so, nvcc)
 * Helper functions - cudaGetErrorString(), cudaGetLastError()   
 
 
-</details>
-
 ## Performance Optimization
-<!-- <details> -->
-<summary>---></summary>
 
 ### Memory Hierachy
 * Global memory: Large and high latency.   
@@ -79,16 +73,10 @@ cudaMemcpy3D(constcudaMemcpy3DParms* p)
 ### Texture and Constant memory
 
 
-</details>
-
-
-
 ## Parallel Algorithms
-<details>
-<summary>---></summary>
 
 Shared Memory
 * 64-96 KB on each SM
 * Read/Write access from kernels
 * Shared within a thread block
-</details>
+
