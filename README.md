@@ -8,11 +8,13 @@
 
 函数库：cublas, nvblas, cusolver, cufftw, cusparse, nvgraph
 
-## Programming
+## Programming with CUDA
+<details>
+<summary>---></summary>
 
 ### Software - driver and runtime APIs
-CUDA Driver API: low-level API 太底层使用不方便，随GPU Driver安装。(libcuda.so)    
-Runtime API：High-level API，随CUDA toolkit安装。(libcudart.so, nvcc)
+CUDA Driver API: low-level API，installed via GPU Driver。(libcuda.so)    
+Runtime API：High-level API，installed CUDA via toolkit。(libcudart.so, nvcc)
 
 ### Exection model - kernels, threads, and blocks
 * Kernel - top-level device function 
@@ -25,32 +27,42 @@ Runtime API：High-level API，随CUDA toolkit安装。(libcudart.so, nvcc)
 * Warps (Groups of 32 threads), Occupancy = Active Warps/Maximum allowed warps
 
 ### Running a Kernel
-1. Blocks are assigned to available SMs
-2. Blocks are split into warps
-3. Multiple warps/blocks run on each SM
-4. As blocks finish, new blocks are scheduled
+* Blocks are assigned to available SMs
+* Blocks are split into warps
+* Multiple warps/blocks run on each SM
+* As blocks finish, new blocks are scheduled
+
+### CUDA API Errors
+* cudaError_t   
+* Helper functions - cudaGetErrorString(), cudaGetLastError()   
+
+
+</details>
 
 ## Performance Optimization
+<!-- <details> -->
+<summary>---></summary>
 
 ### Memory Hierachy
-* Global memory: Large and high latency.<br /> 
-    <i>Thead-level parallelism<br /></i>
-    <i>Coalescing memory access: all data for the warp load in register, as long as the threads need it. ( \_\_align__() , )</i>
+* Global memory: Large and high latency.   
 * L2 cache: Medium latency
 * SM caches: Lower latency
 * Registers: Lowest latency
 
-### Alignment
+### Coalescing memory access
 data should be properly aligned and packed together on a 32, 64 or 128 byte boudary, so thread would access adjacent memory location. nvcc would load entire struct (couldn't be large) in one go.
 ```
-struct \_\_align__() xxx {
+struct __align__(16) xxx {
     float a,
     float b,
-    ...
+    float c,
+    float d
 }
 ```
 
-2D or 3D Memory Layouts
+2D or 3D Memory Layouts  
+使用 `cudaMallocPitch` 保证每行第一个元素的地址是对齐的，这需要补一些其它数值进去，pitch就是加上额外元素之后的实际宽度。  
+` T* pElement = (T*)((char*)BaseAddress + Row * pitch) + Column;`
 ```
 cudaMallocPitch(&input2d.red, &pitch, byte_width, params.height)
 
@@ -64,14 +76,19 @@ cudaMalloc3D(cudaPitchedPtr* ptr, cudaExtent extent)
 cudaMemcpy3D(constcudaMemcpy3DParms* p)
 ```
 
+### Texture and Constant memory
+
+
+</details>
+
+
+
 ## Parallel Algorithms
+<details>
+<summary>---></summary>
+
 Shared Memory
 * 64-96 KB on each SM
 * Read/Write access from kernels
 * Shared within a thread block
-
-### Reduction
-
-### Prefix Sum
-
-### Filtering# CUDA-Programming
+</details>
