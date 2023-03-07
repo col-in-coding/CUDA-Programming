@@ -2,7 +2,7 @@
 
 ### Description
 
-Before developing a Tensorrt Plugin, it is recommand to validate the kernel functionality seperatly. Here we generated some numpy data as inputs, then saved the kernel result and compared with numpy calculated result.
+Before developing a Tensorrt Plugin, it is recommanded to validate the kernel functionality seperatly. Here we generated some numpy data as inputs, then saved the kernel result and compared with numpy calculated result.
 
 cnpy: Numpy data read and write lib from https://github.com/rogersce/cnpy
 
