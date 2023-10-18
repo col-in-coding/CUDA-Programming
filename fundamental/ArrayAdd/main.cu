@@ -11,7 +11,8 @@
 // Error checking macro
 #define cudaCheckError(code)                                             \
   {                                                                      \
-    if ((code) != cudaSuccess) {                                         \
+    if ((code) != cudaSuccess)                                           \
+    {                                                                    \
       fprintf(stderr, "Cuda failure %s:%d: '%s' \n", __FILE__, __LINE__, \
               cudaGetErrorString(code));                                 \
     }                                                                    \
@@ -20,7 +21,8 @@
 // Host function for array addition
 void add_loop(float *dest, int n_elts, const float *a, const float *b)
 {
-  for (int i = 0; i < n_elts; i++) {
+  for (int i = 0; i < n_elts; i++)
+  {
     dest[i] = a[i] + b[i];
   }
 }
@@ -30,21 +32,23 @@ __global__ void add_kernel(float *dest, int n_elts, const float *a,
                            const float *b)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
-  if (index >= n_elts) return;
+  if (index >= n_elts)
+    return;
 
   dest[index] = a[index] + b[index];
 }
 
 int main()
 {
-  const int ARRAY_LENGTH = 100;
+  const int ARRAY_LENGTH = 1000;
 
   // Generate some data on the host
   float host_array_a[ARRAY_LENGTH];
   float host_array_b[ARRAY_LENGTH];
   float host_array_dest[ARRAY_LENGTH];
 
-  for (int i = 0; i < ARRAY_LENGTH; i++) {
+  for (int i = 0; i < ARRAY_LENGTH; i++)
+  {
     host_array_a[i] = 2 * i;
     host_array_b[i] = 2 * i + 1;
   }
@@ -67,7 +71,7 @@ int main()
 
   // Add arrays on device,
   // Kernels are the top-level functions used to run code on the device.
-  add_kernel<<<BLOCK_SIZE, n_blocks>>>(device_array_dest, ARRAY_LENGTH,
+  add_kernel<<<n_blocks, BLOCK_SIZE>>>(device_array_dest, ARRAY_LENGTH,
                                        device_array_a, device_array_b);
 
   // Meanwhile, add arrays on the host, for comparison
@@ -77,11 +81,16 @@ int main()
   float host_array_tmp[ARRAY_LENGTH];
   cudaCheckError(cudaMemcpy(host_array_tmp, device_array_dest,
                             sizeof(host_array_tmp), cudaMemcpyDeviceToHost));
-  for (int i = 0; i < ARRAY_LENGTH; i++) {
+  for (int i = 0; i < ARRAY_LENGTH; i++)
+  {
     assert(host_array_tmp[i] == host_array_dest[i]);
     printf("%g + %g = %g\n", host_array_a[i], host_array_b[i],
            host_array_tmp[i]);
   }
+
+  // Free Memory
+  cudaFree(device_array_a);
+  cudaFree(device_array_b);
 
   return 0;
 }
